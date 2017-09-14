@@ -4,3 +4,4 @@ SELECT
 FROM gebruiker_activiteit
 GROUP BY day
 ORDER BY day
+LIMIT 20;
