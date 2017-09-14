@@ -1,0 +1,10 @@
+@startuml
+
+Component Province
+Component Municipality
+Component ZipCode
+Component Range
+
+
+
+@enduml
