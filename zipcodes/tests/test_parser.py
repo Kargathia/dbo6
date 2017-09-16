@@ -8,11 +8,6 @@ from mock import mock_open
 from zippy import parser
 
 
-@pytest.fixture
-def small_data():
-    return os.path.abspath('tests/testdata/testdata.csv')
-
-
 def test_parse_headers(small_data):
     assert parser.parse_headers(small_data) == [
         'ID', 'POSTCODE', 'POSTCODE_ID', 'PNUM',

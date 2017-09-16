@@ -1,0 +1,1 @@
+SELECT * FROM municipality where id = '1731'

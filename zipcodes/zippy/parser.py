@@ -5,21 +5,21 @@ Parses input file or DB, and inserts created values
 import sys
 
 
-def parse_headers(fpath):
+def parse_headers(fpath, encoding=None):
     """Interprets the first line of a document as its headers.
     Splits them, and returns them as string array"""
-    with open(fpath) as f:
+    with open(fpath, encoding=encoding) as f:
         return (f.readline()
                 .strip()
                 .replace('"', '')
                 .split(','))
 
 
-def parse_data(fpath, headers, firstline=1, lastline=None):
+def parse_data(fpath, headers, firstline=1, lastline=None, encoding=None):
     if not isinstance(firstline, int) or firstline <= 0:
         firstline = 1
 
-    with open(fpath) as f:
+    with open(fpath, encoding=encoding) as f:
         # skip through file until the firstline is reached
         for _ in range(firstline - 1):
             next(f)
