@@ -6,6 +6,7 @@ import pytest
 import os
 from mock import mock_open
 from zippy import parser
+from pprint import pprint
 
 
 def test_parse_headers(small_data):
@@ -33,4 +34,5 @@ def test_parse_all(small_data):
     headers = parser.parse_headers(small_data)
     parsed = {line: vals for line, vals in
               parser.parse_data(small_data, headers, 2)}
+    pprint(parsed)
     assert parsed[11]['CHANGED_DATE'] == '2014-04-10 13:20:28'

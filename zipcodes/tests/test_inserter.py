@@ -73,3 +73,19 @@ def test_insert(small_data, session, headers):
 
     retrieved_city = session.query(City).filter(City.city_id == '1082').first()
     assert len(retrieved_city.zipcodes) == 10
+
+    # test string containing a comma
+    assert session.query(ZipCodeRange).filter(ZipCodeRange.id == '395617').first(
+    ).street == 'Hoofd, en zijstraat'
+
+    # test single quotes
+    assert session.query(ZipCodeRange).filter(ZipCodeRange.id == '395619').first(
+    ).street == 's\'Hoofdstraat'
+
+    # test multiple double quotes
+    assert session.query(ZipCodeRange).filter(ZipCodeRange.id == '395623').first(
+    ).street == 'Hoogerwerfsweg \"\"De Tong\"\"'
+
+    # test empty field
+    assert session.query(ZipCodeRange).filter(ZipCodeRange.id == '395622').first(
+    ).num_type == ''
