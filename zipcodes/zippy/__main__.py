@@ -55,6 +55,7 @@ def init_logging(args):
 
     if args.output:
         log_args['filename'] = args.output
+        log_args['filemode'] = 'w'
 
     logging.basicConfig(**log_args)
 
