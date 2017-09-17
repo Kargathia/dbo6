@@ -5,33 +5,37 @@ Main entry point for zippy
 import os
 import argparse
 import logging
-from zippy import parser, inserter
+from zippy import parser, inserter, connector
 
 
 def set_args():
     argparser = argparse.ArgumentParser()
     argparser.add_argument('csv_file',
                            help='The CSV file containing the ZipCode Database')
-    argparser.add_argument('-d', '--database',
+    argparser.add_argument('--database',
                            help='The Postgres database name',
                            default='zippy')
-    argparser.add_argument('-u', '--username',
+    argparser.add_argument('--username',
                            help='The database user name',
                            default='postgres')
-    argparser.add_argument('-p', '--password',
+    argparser.add_argument('--password',
                            help='The database password',
                            default='root')
-    argparser.add_argument('-r', '--recreate',
+    argparser.add_argument('--recreate',
                            help='Drop and recreate the database',
                            type=bool,
                            default=False)
-    argparser.add_argument('-s', '--startline',
+    argparser.add_argument('--startline',
                            help='The first line to be inserted',
                            default=2,
                            type=int)
-    argparser.add_argument('-e', '--endline',
+    argparser.add_argument('--endline',
                            help='The last line to be inserted',
                            default=None,
+                           type=int)
+    argparser.add_argument('--batchsize',
+                           help='Insertion batch size(lines)',
+                           default=1000,
                            type=int)
     argparser.add_argument('--encoding',
                            help='Data file encoding',
@@ -48,12 +52,12 @@ def main():
     fpath = os.path.abspath(args.csv_file)
 
     headers = parser.parse_headers(fpath, args.encoding)
-    engine = inserter.connect(args.username, args.password, args.database)
+    engine = connector.connect(args.username, args.password, args.database)
 
     if args.recreate:
         logging.info('Dropping and recreating database')
-        inserter.recreate_database(engine)
-    inserter.setup(engine)
+        connector.recreate_database(engine)
+    connector.setup(engine)
 
     for line_num, vals in parser.parse_data(
             fpath,
@@ -62,9 +66,10 @@ def main():
             lastline=args.endline,
             encoding=args.encoding):
         try:
-            with inserter.session_scope() as session:
+            with connector.session_scope() as session:
                 inserter.insert(session, vals)
-                (line_num % 100 == 0) and logging.info('processed line {}'.format(line_num))
+                if line_num % args.batchsize == 0:
+                    logging.info('processed line {}'.format(line_num))
         except Exception as ex:
             logging.error('error reading line {}'.format(line_num))
             logging.exception(ex)

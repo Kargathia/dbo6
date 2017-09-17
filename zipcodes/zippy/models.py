@@ -49,6 +49,7 @@ class Municipality(Base):
     id = Column(Integer, primary_key=True)
     municipality_id = Column(String)
     name = Column(String)
+
     cities = relationship('City',
                           secondary=municipality_city,
                           backref='municipalities')
@@ -60,6 +61,7 @@ class City(Base):
     id = Column(Integer, primary_key=True)
     city_id = Column(String)
     name = Column(String)
+
     zipcodes = relationship('ZipCode',
                             secondary=city_zipcode,
                             backref='cities')

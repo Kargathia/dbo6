@@ -2,59 +2,24 @@
 Responsible for inserting raw value dicts into the DB as well-formed objects
 """
 
+import logging
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import noload
 from sqlalchemy.sql.expression import ClauseElement
-from sqlalchemy_utils import database_exists, create_database, drop_database
-from contextlib import contextmanager
 from zippy import models
 from zippy.models import Province, Municipality, City, ZipCode, ZipCodeRange
 
-Session = sessionmaker()
 
+def get_or_create(session, model, avoid=None, **kwargs):
+    qr = session.query(model).filter_by(**kwargs)
+    if avoid:
+        qr = qr.options(noload(*avoid))
 
-def connect(user, password, db, host='localhost', port=5432):
-    '''Returns a connection and a metadata object'''
-    # We connect with the help of the PostgreSQL URL
-    # postgresql://federer:grandestslam@localhost:5432/tennis
-    url = 'postgresql://{}:{}@{}:{}/{}'
-    url = url.format(user, password, host, port, db)
-
-    # The return value of create_engine() is our connection object
-    return sqlalchemy.create_engine(url, client_encoding='utf8')
-
-
-def recreate_database(engine):
-    if database_exists(engine.url):
-        drop_database(engine.url)
-    create_database(engine.url)
-
-
-def setup(engine):
-    Session.configure(bind=engine)
-    models.Base.metadata.create_all(engine)
-
-
-@contextmanager
-def session_scope():
-    session = Session()
-    try:
-        yield session
-        session.commit()
-    except:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-
-def get_or_create(session, model, defaults=None, **kwargs):
-    instance = session.query(model).filter_by(**kwargs).first()
+    instance = qr.first()
     if instance:
         return instance, False
     else:
         params = dict((k, v) for k, v in kwargs.items() if not isinstance(v, ClauseElement))
-        params.update(defaults or {})
         instance = model(**params)
         session.add(instance)
         return instance, True
@@ -77,24 +42,24 @@ def add_zipcode_range(session, vals):
 
 
 def add_zipcode(session, vals):
-    return get_or_create(session, ZipCode,
+    return get_or_create(session, ZipCode, avoid=['ranges'],
                          code=vals['POSTCODE'])
 
 
 def add_city(session, vals):
-    return get_or_create(session, City,
+    return get_or_create(session, City, avoid=['zipcodes'],
                          city_id=vals['CITY_ID'],
                          name=vals['CITY'])
 
 
 def add_municipality(session, vals):
-    return get_or_create(session, Municipality,
+    return get_or_create(session, Municipality, avoid=['cities'],
                          municipality_id=vals['MUNICIPALITY_ID'],
                          name=vals['MUNICIPALITY'])
 
 
 def add_province(session, vals):
-    return get_or_create(session, Province,
+    return get_or_create(session, Province, avoid=['municipalities'],
                          code=vals['PROVINCE_CODE'],
                          name=vals['PROVINCE'])
 

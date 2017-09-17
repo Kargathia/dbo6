@@ -1,1 +1,1 @@
-SELECT * FROM municipality where id = '1731'
+SELECT * FROM municipality where municipality_id = '1731'
