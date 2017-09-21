@@ -17,4 +17,14 @@ FROM
     (SELECT COUNT(DISTINCT(sql_vragen_nr)) as num
     FROM gebruiker_activiteit
     WHERE gebruiker_nr = 200
-    ) all_answ
+    ) all_answ;
+
+SELECT *
+FROM gebruiker_activiteit
+WHERE gebruiker_nr = 200
+AND sql_vragen_nr = 25;
+
+SELECT sql_vragen_nr, string_agg(status, ',' order by status) as status_list
+FROM gebruiker_activiteit
+WHERE gebruiker_nr = 200
+GROUP BY sql_vragen_nr;

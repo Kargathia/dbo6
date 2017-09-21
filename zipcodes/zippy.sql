@@ -22,3 +22,13 @@ FROM province
 GROUP BY name
 HAVING (COUNT(name) > 1);
 
+SELECT
+  city.name,
+  municipality.name
+FROM
+  city
+INNER JOIN municipality_city
+ON city.id = municipality_city.fk_city
+INNER JOIN municipality
+ON municipality_city.fk_municipality = municipality.id
+WHERE city.name = 'Achterveld';

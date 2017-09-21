@@ -1,8 +1,8 @@
 -- Drop changes
 DROP TRIGGER IF EXISTS calc_total_trigger ON Extra;
-DROP TRIGGER IF EXISTS calc_total_reduced_trigger ON Extra;
+DROP FUNCTION IF EXISTS calc_extra_total_func(factuur_nr INTEGER);
+DROP FUNCTION IF EXISTS calc_car_total_func(factuur_nr INTEGER);
 DROP FUNCTION IF EXISTS calc_total_func();
-DROP FUNCTION IF EXISTS calc_total_reduced_func();
 DROP FUNCTION IF EXISTS calc_extra_func(curr_object_id integer);
 ALTER TABLE huurovereenkomst
     DROP COLUMN IF EXISTS totaalprijs;
@@ -50,65 +50,87 @@ LANGUAGE 'plpgsql';
 
 
 
--- Update total price for a contract
-CREATE FUNCTION calc_total_func()
-RETURNS TRIGGER AS
+CREATE FUNCTION calc_car_total_func(factuur_nr INTEGER)
+RETURNS DECIMAL(5,2) AS
 $$
+    DECLARE
+        total decimal(5,2) DEFAULT 0;
     BEGIN
-        UPDATE Huurovereenkomst
-        SET totaalprijs = calc_query.total
-        FROM 
-        (
-            SELECT 
-            SUM(calc_extra_func(relevant_extra."HuurobjectID") 
-                * (new_overeenkomst."TotDatum"::date - new_overeenkomst."VanDatum"::date)) 
-                as total
-            FROM 
-            (
-                SELECT extra."HuurobjectID"
-                FROM extra
-                WHERE extra."Factuurnummer" = NEW."Factuurnummer"
-            ) relevant_extra,
-            (   
-                SELECT * 
-                FROM Huurovereenkomst
-                WHERE "Factuurnummer" = NEW."Factuurnummer" 
-            ) new_overeenkomst
-        ) calc_query
-        WHERE Huurovereenkomst."Factuurnummer" = NEW."Factuurnummer";
-        RETURN NEW;
+        -- SELECT SUM(
+        --     Voertuigtype."PrijsPerDag" 
+        --     * (Huurovereenkomst."TotDatum"::date - Huurovereenkomst."VanDatum"::date))
+        -- INTO total
+        -- FROM Huurovereenkomst
+        -- INNER JOIN Voertuig
+        -- ON Huurovereenkomst."VoertuigID" = Voertuig."ID"
+        -- INNER JOIN Voertuigtype
+        -- ON Voertuig."VoertuigtypeID" = Voertuigtype."ID"
+        -- WHERE Huurovereenkomst."Factuurnummer" = factuur_nr;
+
+        RETURN 0;
     END;
 $$
 LANGUAGE 'plpgsql';
 
 
 
--- Update total price for a contract
-CREATE FUNCTION calc_total_reduced_func()
-RETURNS TRIGGER AS
+CREATE FUNCTION calc_extra_total_func(factuur_nr INTEGER)
+RETURNS decimal(5,2) AS
 $$
+    DECLARE
+        total decimal(5,2) DEFAULT 0;
     BEGIN
-        UPDATE Huurovereenkomst
-        SET totaalprijs = (Huurovereenkomst.totaalprijs - calc_query.total)
+        SELECT 
+        SUM(calc_extra_func(relevant_extra."HuurobjectID") 
+            * (new_overeenkomst."TotDatum"::date - new_overeenkomst."VanDatum"::date)) 
+        INTO total
         FROM 
         (
-            SELECT 
-            SUM(calc_extra_func(relevant_extra."HuurobjectID") 
-                * (updated_overeenkomst."TotDatum"::date - updated_overeenkomst."VanDatum"::date))
-                as total
-            FROM 
-            (
-                SELECT extra."HuurobjectID"
-                FROM extra
-                WHERE extra."Factuurnummer" = OLD."Factuurnummer"
-            ) relevant_extra,
-            (   
-                SELECT * 
-                FROM Huurovereenkomst
-                WHERE "Factuurnummer" = OLD."Factuurnummer" 
-            ) updated_overeenkomst
-        ) calc_query
-        WHERE Huurovereenkomst."Factuurnummer" = OLD."Factuurnummer";
+            SELECT extra."HuurobjectID"
+            FROM extra
+            WHERE extra."Factuurnummer" = factuur_nr
+        ) relevant_extra,
+        (   
+            SELECT * 
+            FROM Huurovereenkomst
+            WHERE "Factuurnummer" = factuur_nr
+        ) new_overeenkomst;
+
+        RETURN total;
+    END;
+$$
+LANGUAGE 'plpgsql';
+
+
+-- Update total price for a contract
+CREATE FUNCTION calc_total_func()
+RETURNS TRIGGER AS
+$$
+    DECLARE
+        car_prijs decimal(5,2) DEFAULT 0;
+        extra_prijs decimal(5,2) DEFAULT 0;
+    BEGIN
+        IF TG_OP = 'UPDATE'
+        OR TG_OP = 'INSERT'
+        THEN
+            -- car_prijs = calc_extra_total_func(NEW."Factuurnummer");
+
+            UPDATE Huurovereenkomst
+            SET totaalprijs = (
+                calc_extra_total_func(NEW."Factuurnummer") 
+                + calc_car_total_func(NEW."Factuurnummer"))
+            WHERE "Factuurnummer" = NEW."Factuurnummer";
+        ELSEIF TG_OP = 'DELETE'
+        THEN 
+            UPDATE Huurovereenkomst
+            SET totaalprijs = (
+                calc_extra_total_func(OLD."Factuurnummer") 
+                + calc_car_total_func(OLD."Factuurnummer"))
+            WHERE "Factuurnummer" = OLD."Factuurnummer";
+        END IF;
+
+        -- raise notice 'Value: %', deletedContactId;
+        
         RETURN NEW;
     END;
 $$
@@ -117,18 +139,10 @@ LANGUAGE 'plpgsql';
 
 
 -- Add trigger
-CREATE TRIGGER calc_total_trigger AFTER INSERT OR UPDATE
+CREATE TRIGGER calc_total_trigger AFTER INSERT OR UPDATE OR DELETE
 ON EXTRA
 FOR EACH ROW
 EXECUTE PROCEDURE calc_total_func();
-
-
-
--- Add trigger for deleted extras
-CREATE TRIGGER calc_total_reduced_trigger AFTER DELETE
-ON EXTRA
-FOR EACH ROW
-EXECUTE PROCEDURE calc_total_reduced_func();
 
 
 
@@ -197,12 +211,17 @@ SELECT
     (Huurovereenkomst."TotDatum"::date - Huurovereenkomst."VanDatum"::date) as duration,
     Extra."HuurobjectID",
     Huurobject."PrijsPerDag",
-    Huurobject."HuurobjectID_Benodigd"
+    Huurobject."HuurobjectID_Benodigd",
+    Voertuigtype."PrijsPerDag" as VoertuigPrijsPerDag
 FROM Huurovereenkomst
 INNER JOIN Extra
 ON (Extra."Factuurnummer" = Huurovereenkomst."Factuurnummer")
 INNER JOIN Huurobject
-ON (Extra."HuurobjectID" = Huurobject."ID");
+ON (Extra."HuurobjectID" = Huurobject."ID")
+INNER JOIN Voertuig
+ON (Huurovereenkomst."VoertuigID" = Voertuig."ID")
+INNER JOIN Voertuigtype
+ON (Voertuig."VoertuigtypeID" = Voertuigtype."ID");
 
 
 
@@ -228,9 +247,14 @@ SELECT
     (Huurovereenkomst."TotDatum"::date - Huurovereenkomst."VanDatum"::date) as duration,
     Extra."HuurobjectID",
     Huurobject."PrijsPerDag",
-    Huurobject."HuurobjectID_Benodigd"
+    Huurobject."HuurobjectID_Benodigd",
+    Voertuigtype."PrijsPerDag" as VoertuigPrijsPerDag
 FROM Huurovereenkomst
 INNER JOIN Extra
 ON (Extra."Factuurnummer" = Huurovereenkomst."Factuurnummer")
 INNER JOIN Huurobject
-ON (Extra."HuurobjectID" = Huurobject."ID");
+ON (Extra."HuurobjectID" = Huurobject."ID")
+INNER JOIN Voertuig
+ON (Huurovereenkomst."VoertuigID" = Voertuig."ID")
+INNER JOIN Voertuigtype
+ON (Voertuig."VoertuigtypeID" = Voertuigtype."ID");
