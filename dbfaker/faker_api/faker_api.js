@@ -8,7 +8,6 @@ var jsonParser = bodyParser.json()
 
 app.post('/fake', jsonParser, function (req, res) {
     if (!req.body) return res.sendStatus(400);
-    console.log(req.body.type);
     res.send(faker.fake('{{' + req.body.type + '}}'));
   })
 
