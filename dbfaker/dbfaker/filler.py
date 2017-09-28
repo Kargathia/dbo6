@@ -2,11 +2,13 @@
 Reads the database spec, and generates random data based on it
 """
 
+import sys
 import requests
 from dbfaker import connector
 from sqlalchemy.sql.expression import ClauseElement
 from sqlalchemy import inspect
 import uuid
+from pprint import pprint
 
 
 def create(session, model, kwargs):
@@ -17,13 +19,7 @@ def create(session, model, kwargs):
 
 
 def request_value(faker_type):
-    return {
-        'faker.random.number': lambda: 12.3,
-        'faker.random.arrayIndex': lambda: 9,
-        'faker.random.word': lambda: 'testey',
-        'faker.random.word.unique': lambda: str(uuid.uuid4())
-    }[faker_type]()
-    # query API for values
+    return requests.post('http://localhost:8081/fake', json={'type': faker_type}).text
 
 
 def fill_database(engine, base, spec):
@@ -51,5 +47,9 @@ def get_column_val(columns):
             pass
         else:
             val = request_value(filler)
+
+        pytype = spec['pytype']
+        if pytype:
+            val = __builtins__[pytype](val)
 
         yield name, val

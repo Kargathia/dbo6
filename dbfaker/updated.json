@@ -5,18 +5,21 @@
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "id": {
                 "filler": null,
                 "fk": [],
                 "pk": true,
+                "pytype": null,
                 "type": "INTEGER"
             },
             "name": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             }
         },
@@ -28,18 +31,21 @@
                 "filler": null,
                 "fk": [],
                 "pk": true,
+                "pytype": null,
                 "type": "INTEGER"
             },
             "municipality_id": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "name": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             }
         },
@@ -51,12 +57,14 @@
                 "filler": "random.uuid",
                 "fk": [],
                 "pk": true,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "name": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             }
         },
@@ -68,6 +76,7 @@
                 "filler": "random.uuid",
                 "fk": [],
                 "pk": true,
+                "pytype": "str",
                 "type": "VARCHAR"
             }
         },
@@ -79,60 +88,70 @@
                 "filler": "random.uuid",
                 "fk": [],
                 "pk": true,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "last_change": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "latitude": {
                 "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "float",
                 "type": "DOUBLE PRECISION"
             },
             "longitude": {
                 "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "float",
                 "type": "DOUBLE PRECISION"
             },
             "max_num": {
-                "filler": "random.arrayIndex",
+                "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "int",
                 "type": "INTEGER"
             },
             "min_num": {
-                "filler": "random.arrayIndex",
+                "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "int",
                 "type": "INTEGER"
             },
             "num_type": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "rd_x": {
                 "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "float",
                 "type": "DOUBLE PRECISION"
             },
             "rd_y": {
                 "filler": "random.number",
                 "fk": [],
                 "pk": false,
+                "pytype": "float",
                 "type": "DOUBLE PRECISION"
             },
             "street": {
                 "filler": "random.word",
                 "fk": [],
                 "pk": false,
+                "pytype": "str",
                 "type": "VARCHAR"
             },
             "zipcode_code": {
@@ -144,6 +163,7 @@
                     "ForeignKey('zipcode.code')"
                 ],
                 "pk": false,
+                "pytype": null,
                 "type": "VARCHAR"
             }
         },

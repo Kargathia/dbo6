@@ -1,0 +1,12 @@
+{
+  "name": "faker_api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node faker_api.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.15.5",
+    "faker": "^4.1.0"
+  }
+}

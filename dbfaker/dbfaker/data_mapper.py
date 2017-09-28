@@ -28,36 +28,44 @@ def map_table(table_class, generate_num=10):
 
 def map_column(column):
     c = inspect(column)
+    filler, pytype = guess_filler(c)
     return column.name, {
         'type': str(c.type),
-        'filler': guess_filler(c),
+        'pytype': pytype,
+        'filler': filler,
         'pk': c.primary_key,
         'fk': [str(fk) for fk in c.foreign_keys]
     }
 
 
 def guess_varchar(inspected):
-    return 'faker.random.word'
+    return 'random.word', 'str'
 
 
 def guess_int(inspected):
-    return 'faker.random.arrayIndex'
+    return 'random.number', 'int'
 
 
 def guess_double(inspected):
-    return 'faker.random.number'
+    return 'random.number', 'float'
+
+
+def guess_unique(inspected):
+    return 'random.uuid', 'str'
 
 
 def guess_filler(inspected):
-    result = None
-    if inspected.primary_key:
-        pass  # we're assuming it's going to be auto generated
+    result = (None, None)
+    if inspected.primary_key and inspected.server_default:
+        pass
+    elif inspected.primary_key:
+        result = guess_unique(inspected)
     elif inspected.foreign_keys:
         fk = [fk for fk in inspected.foreign_keys][0]
-        result = {
+        result = ({
             'column': fk.column.name,
             'table': fk.column.table.name
-        }
+        }, None)
     else:
         result = {
             'INTEGER': guess_int,
