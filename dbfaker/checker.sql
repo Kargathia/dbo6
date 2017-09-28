@@ -1,0 +1,1 @@
+SELECT * FROM zipcoderange LIMIT 100;

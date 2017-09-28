@@ -1,0 +1,152 @@
+{
+    "city": {
+        "columns": {
+            "city_id": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            },
+            "id": {
+                "filler": null,
+                "fk": [],
+                "pk": true,
+                "type": "INTEGER"
+            },
+            "name": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            }
+        },
+        "num_generated": 10
+    },
+    "municipality": {
+        "columns": {
+            "id": {
+                "filler": null,
+                "fk": [],
+                "pk": true,
+                "type": "INTEGER"
+            },
+            "municipality_id": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            },
+            "name": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            }
+        },
+        "num_generated": 10
+    },
+    "province": {
+        "columns": {
+            "code": {
+                "filler": "faker.random.word.unique",
+                "fk": [],
+                "pk": true,
+                "type": "VARCHAR"
+            },
+            "name": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            }
+        },
+        "num_generated": 10
+    },
+    "zipcode": {
+        "columns": {
+            "code": {
+                "filler": "faker.random.word.unique",
+                "fk": [],
+                "pk": true,
+                "type": "VARCHAR"
+            }
+        },
+        "num_generated": 10
+    },
+    "zipcoderange": {
+        "columns": {
+            "id": {
+                "filler": "faker.random.word.unique",
+                "fk": [],
+                "pk": true,
+                "type": "VARCHAR"
+            },
+            "last_change": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            },
+            "latitude": {
+                "filler": "faker.random.number",
+                "fk": [],
+                "pk": false,
+                "type": "DOUBLE PRECISION"
+            },
+            "longitude": {
+                "filler": "faker.random.number",
+                "fk": [],
+                "pk": false,
+                "type": "DOUBLE PRECISION"
+            },
+            "max_num": {
+                "filler": "faker.random.arrayIndex",
+                "fk": [],
+                "pk": false,
+                "type": "INTEGER"
+            },
+            "min_num": {
+                "filler": "faker.random.arrayIndex",
+                "fk": [],
+                "pk": false,
+                "type": "INTEGER"
+            },
+            "num_type": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            },
+            "rd_x": {
+                "filler": "faker.random.number",
+                "fk": [],
+                "pk": false,
+                "type": "DOUBLE PRECISION"
+            },
+            "rd_y": {
+                "filler": "faker.random.number",
+                "fk": [],
+                "pk": false,
+                "type": "DOUBLE PRECISION"
+            },
+            "street": {
+                "filler": "faker.random.word",
+                "fk": [],
+                "pk": false,
+                "type": "VARCHAR"
+            },
+            "zipcode_code": {
+                "filler": {
+                    "column": "code",
+                    "table": "zipcode"
+                },
+                "fk": [
+                    "ForeignKey('zipcode.code')"
+                ],
+                "pk": false,
+                "type": "VARCHAR"
+            }
+        },
+        "num_generated": 10
+    }
+}

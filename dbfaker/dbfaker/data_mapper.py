@@ -14,12 +14,15 @@ def map_base(base):
     return db_dict
 
 
-def map_table(table_class):
+def map_table(table_class, generate_num=10):
     tbl = inspect(table_class).tables[0]
-    table_dict = {}
+    table_dict = {
+        'num_generated': generate_num,
+        'columns': {}
+    }
     for column in tbl.columns:
         k, v = map_column(column)
-        table_dict[k] = v
+        table_dict['columns'][k] = v
     return tbl.name, table_dict
 
 
@@ -46,7 +49,6 @@ def guess_double(inspected):
 
 
 def guess_filler(inspected):
-    pprint(inspected)
     result = None
     if inspected.primary_key:
         pass  # we're assuming it's going to be auto generated
