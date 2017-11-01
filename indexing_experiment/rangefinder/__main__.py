@@ -5,7 +5,7 @@ Main entry point for zippy
 import os
 import argparse
 import logging
-from zippy import parser, inserter, connector
+from rangefinder import connector, indexer
 
 
 def get_args():
@@ -22,6 +22,11 @@ def get_args():
     argparser.add_argument('--output',
                            help='Log output file. Default = stdout',
                            default='')
+    argparser.add_argument('-i', '--index',
+                           help='Used index type')
+    argparser.add_argument('-d', '--drop_index',
+                           help='Drop index if exists. Default = false',
+                           action='store_true')
     return argparser.parse_args()
 
 
@@ -46,10 +51,21 @@ def main():
     engine = connector.connect(args.username, args.password, args.database)
     connector.setup(engine)
 
-    # add index of choice
-    # do lookup
+    with connector.session_scope() as session:
+        indexer.add_extension(session)
+
+        if args.drop_index or args.index:
+            logging.info('dropping index...')
+            indexer.drop_index(session)
+
+        if args.index:
+            logging.info('adding index...')
+            indexer.add_index(engine, args.index)
+
+        # TODO: time this shit
 
     logging.info('That\'s all, folks!')
+
 
 if __name__ == '__main__':
     main()
