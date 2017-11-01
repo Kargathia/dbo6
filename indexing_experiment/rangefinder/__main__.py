@@ -5,6 +5,7 @@ Main entry point for zippy
 import os
 import argparse
 import logging
+import timeit
 from rangefinder import connector, indexer
 
 
@@ -27,6 +28,13 @@ def get_args():
     argparser.add_argument('-d', '--drop_index',
                            help='Drop index if exists. Default = false',
                            action='store_true')
+    argparser.add_argument('--closest',
+                           help='Time finding closest lat/long to Amsterdam',
+                           action='store_true')
+    argparser.add_argument('-r', '--repeats',
+                           help='Number of times query is repeated',
+                           type=int,
+                           default=100)
     return argparser.parse_args()
 
 
@@ -59,10 +67,16 @@ def main():
             indexer.drop_index(session)
 
         if args.index:
-            logging.info('adding index...')
+            logging.info('adding {} index...'.format(args.index))
             indexer.add_index(engine, args.index)
 
-        # TODO: time this shit
+        if args.closest:
+            logging.info('finding closest...')
+            action = 'finder.find_closest(session, 52.3667, 4.9000, limit=100)'
+            duration = timeit.timeit(action, number=args.repeats)
+            avg = duration / args.repeats
+            logging.info(
+                'Finding closest to Amsterdam(52.3667, 4.9000) took {} seconds avg'.format(avg))
 
     logging.info('That\'s all, folks!')
 
