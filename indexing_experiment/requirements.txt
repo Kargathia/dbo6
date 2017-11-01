@@ -6,3 +6,4 @@ pytest-mock
 psycopg2
 sqlalchemy
 sqlalchemy_utils
+geopy

@@ -6,7 +6,7 @@ import os
 import argparse
 import logging
 import timeit
-from rangefinder import connector, indexer
+from rangefinder import connector, indexer, finder
 
 
 def get_args():
@@ -72,8 +72,8 @@ def main():
 
         if args.closest:
             logging.info('finding closest...')
-            action = 'finder.find_closest(session, 52.3667, 4.9000, limit=100)'
-            duration = timeit.timeit(action, number=args.repeats)
+            duration = timeit.timeit(lambda: finder.find_closest(
+                session, 52.3667, 4.9000, limit=100), number=args.repeats)
             avg = duration / args.repeats
             logging.info(
                 'Finding closest to Amsterdam(52.3667, 4.9000) took {} seconds avg'.format(avg))

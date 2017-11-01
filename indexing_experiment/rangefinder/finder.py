@@ -3,6 +3,7 @@ Performs various lookup functions in the zipcode database
 """
 
 
+import logging
 from sqlalchemy import func
 from rangefinder.models import ZipCodeRange
 
@@ -23,5 +24,9 @@ def find_closest(session, lat, long, limit):
     for row in result:
         zipcoderange = row[0]
         zipcoderange.distance = row[1]
+        # logging.info('range(lat={},long={}) with distance {}'.format(
+        #     zipcoderange.latitude,
+        #     zipcoderange.longitude,
+        #     zipcoderange.distance))
         mapped.append(zipcoderange)
     return mapped
