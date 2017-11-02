@@ -24,9 +24,11 @@ def find_closest(session, lat, long, limit):
     for row in result:
         zipcoderange = row[0]
         zipcoderange.distance = row[1]
-        # logging.info('range(lat={},long={}) with distance {}'.format(
-        #     zipcoderange.latitude,
-        #     zipcoderange.longitude,
-        #     zipcoderange.distance))
         mapped.append(zipcoderange)
+
+    logging.info('closest range(zipcode= {}, lat={},long={}) with distance {}'.format(
+        mapped[0].zipcode_code,
+        mapped[0].latitude,
+        mapped[0].longitude,
+        mapped[0].distance))
     return mapped

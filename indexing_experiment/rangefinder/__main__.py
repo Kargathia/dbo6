@@ -34,7 +34,7 @@ def get_args():
     argparser.add_argument('-r', '--repeats',
                            help='Number of times query is repeated',
                            type=int,
-                           default=100)
+                           default=1)
     return argparser.parse_args()
 
 

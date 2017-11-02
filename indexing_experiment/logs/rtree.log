@@ -1,0 +1,13 @@
+11-02 10:21:29 root         INFO     finding closest...
+11-02 10:21:40 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:21:51 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:22:03 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:22:14 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:22:30 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:22:46 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:22:58 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:23:09 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:23:21 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:23:32 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:23:32 root         INFO     Finding closest to Amsterdam(52.3667, 4.9000) took 12.370341651982354 seconds avg
+11-02 10:23:32 root         INFO     That's all, folks!

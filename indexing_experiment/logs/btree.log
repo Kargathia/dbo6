@@ -1,0 +1,15 @@
+11-02 10:28:24 root         INFO     dropping index...
+11-02 10:28:24 root         INFO     adding btree index...
+11-02 10:28:35 root         INFO     finding closest...
+11-02 10:28:47 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:28:59 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:29:10 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:29:22 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:29:33 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:29:44 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:29:56 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:30:07 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:30:19 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:30:31 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
+11-02 10:30:31 root         INFO     Finding closest to Amsterdam(52.3667, 4.9000) took 11.610527219905984 seconds avg
+11-02 10:30:31 root         INFO     That's all, folks!
