@@ -1,14 +1,91 @@
-11-02 10:24:22 root         INFO     dropping index...
-11-02 10:24:22 root         INFO     finding closest...
-11-02 10:24:35 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:24:46 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:24:59 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:25:13 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:25:26 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:25:38 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:25:51 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:26:04 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:26:17 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:26:29 root         INFO     closest range(zipcode= 1017AG, lat=52.3665240634738,long=4.8997495721487) with distance 25.9487991052771
-11-02 10:26:29 root         INFO     Finding closest to Amsterdam(52.3667, 4.9000) took 12.728537658641883 seconds avg
-11-02 10:26:29 root         INFO     That's all, folks!
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'province_municipality'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.55ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'municipality_city'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.02ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'city_zipcode'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 0.98ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'province'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.02ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'municipality'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.00ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'city'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.71ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'zipcode'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.00ms
+11-02 12:21:57 root         DEBUG    Start Query:
+select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'name': 'zipcoderange'}
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 1.00ms
+11-02 12:21:57 root         DEBUG    Start Query:
+CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 2.00ms
+11-02 12:21:57 root         INFO     dropping index...
+11-02 12:21:57 root         DEBUG    Start Query:
+DROP INDEX IF EXISTS rangefinder
+11-02 12:21:57 root         DEBUG    Query Complete!
+11-02 12:21:57 root         DEBUG    Total Time: 2.11ms
+11-02 12:21:57 root         INFO     finding closest...
+11-02 12:21:57 root         DEBUG    Start Query:
+EXPLAIN ANALYZE SELECT zipcoderange.id AS zipcoderange_id, zipcoderange.zipcode_code AS zipcoderange_zipcode_code, zipcoderange.street AS zipcoderange_street, zipcoderange.min_num AS zipcoderange_min_num, zipcoderange.max_num AS zipcoderange_max_num, zipcoderange.num_type AS zipcoderange_num_type, zipcoderange.latitude AS zipcoderange_latitude, zipcoderange.longitude AS zipcoderange_longitude, zipcoderange.rd_x AS zipcoderange_rd_x, zipcoderange.rd_y AS zipcoderange_rd_y, zipcoderange.last_change AS zipcoderange_last_change 
+FROM zipcoderange 
+WHERE earth_box(ll_to_earth(%(ll_to_earth_1)s, %(ll_to_earth_2)s), %(earth_box_1)s) @> ll_to_earth(zipcoderange.latitude, zipcoderange.longitude) 
+ LIMIT %(param_1)s
+11-02 12:21:57 root         DEBUG    Parameters:
+{'ll_to_earth_1': 52.3667, 'll_to_earth_2': 4.9, 'earth_box_1': 100, 'param_1': 100}
+11-02 12:22:11 root         DEBUG    Query Complete!
+11-02 12:22:11 root         DEBUG    Total Time: 13877.03ms
+11-02 12:22:11 root         INFO     [('Limit  (cost=0.00..27945.37 rows=100 width=90) (actual time=7273.704..13870.637 rows=7 loops=1)',),
+ ('  ->  Seq Scan on zipcoderange  (cost=0.00..131902.16 rows=472 width=90) (actual time=7273.702..13870.632 rows=7 loops=1)',),
+ ("        Filter: ('(3880211.27870546, 332560.024099455, 5050993.81470404),(3880411.27870546, 332760.024099453, 5051193.81470403)'::cube @> (ll_to_earth(latitude, longitude))::cube)",),
+ ('        Rows Removed by Filter: 471986',),
+ ('Planning time: 4.350 ms',),
+ ('Execution time: 13870.665 ms',)]
+11-02 12:22:11 root         DEBUG    Start Query:
+SELECT zipcoderange.id AS zipcoderange_id, zipcoderange.zipcode_code AS zipcoderange_zipcode_code, zipcoderange.street AS zipcoderange_street, zipcoderange.min_num AS zipcoderange_min_num, zipcoderange.max_num AS zipcoderange_max_num, zipcoderange.num_type AS zipcoderange_num_type, zipcoderange.latitude AS zipcoderange_latitude, zipcoderange.longitude AS zipcoderange_longitude, zipcoderange.rd_x AS zipcoderange_rd_x, zipcoderange.rd_y AS zipcoderange_rd_y, zipcoderange.last_change AS zipcoderange_last_change 
+FROM zipcoderange 
+WHERE earth_box(ll_to_earth(%(ll_to_earth_1)s, %(ll_to_earth_2)s), %(earth_box_1)s) @> ll_to_earth(zipcoderange.latitude, zipcoderange.longitude) 
+ LIMIT %(param_1)s
+11-02 12:22:11 root         DEBUG    Parameters:
+{'ll_to_earth_1': 52.3667, 'll_to_earth_2': 4.9, 'earth_box_1': 100, 'param_1': 100}
+11-02 12:22:20 root         DEBUG    Query Complete!
+11-02 12:22:20 root         DEBUG    Total Time: 9251.25ms
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1011PN, lat=52.3676418337555,long=4.9003315756477)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017AE, lat=52.3668237929662,long=4.8989043377941)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017AG, lat=52.3665240634738,long=4.8997495721487)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017AH, lat=52.3660540292645,long=4.9001721463817)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017CE, lat=52.3656874917446,long=4.8994825790753)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017CZ, lat=52.3664418068836,long=4.8991995206116)
+11-02 12:22:20 root         INFO     found zipcoderange(zipcode=1017DA, lat=52.366193058184,long=4.8991673402693)
+11-02 12:22:20 root         INFO     Finding closest to Amsterdam(52.3667, 4.9000) took 23.15765548714281 seconds avg
+11-02 12:22:20 root         INFO     That's all, folks!

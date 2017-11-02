@@ -21,9 +21,8 @@ def before_cursor_execute(conn, cursor, statement,
                           parameters, context, executemany):
     context._query_start_time = time.time()
     logging.debug('Start Query:\n%s' % statement)
-    # Modification for StackOverflow answer:
-    # Show parameters, which might be too verbose, depending on usage..
-    logging.debug('Parameters:\n%r' % (parameters,))
+    if parameters:
+        logging.debug('Parameters:\n%r' % (parameters,))
 
 
 @event.listens_for(Engine, 'after_cursor_execute')
@@ -31,8 +30,6 @@ def after_cursor_execute(conn, cursor, statement,
                          parameters, context, executemany):
     total = time.time() - context._query_start_time
     logging.debug('Query Complete!')
-
-    # Modification for StackOverflow: times in milliseconds
     logging.debug('Total Time: %.02fms' % (total * 1000))
 
 

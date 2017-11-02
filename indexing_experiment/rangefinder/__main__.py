@@ -62,10 +62,12 @@ def main():
     with connector.session_scope() as session:
         indexer.add_extension(session)
 
-        if args.drop_index or args.index:
+    if args.drop_index or args.index:
+        with connector.session_scope() as session:
             logging.info('dropping index...')
             indexer.drop_index(session)
 
+    with connector.session_scope() as session:
         if args.index:
             logging.info('adding {} index...'.format(args.index))
             indexer.add_index(engine, args.index)
